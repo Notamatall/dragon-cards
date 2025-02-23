@@ -1,0 +1,58 @@
+.card:hover[data-selected="false"] {
+  box-shadow: 0 0 6px 7.5px #264079, 0 0 7px 7px #6066d0, 0 0 13px 5.5px #6b7f29 !important;
+}
+
+.card {
+  padding: 0px;
+  border-radius: 20px;
+  transition: all 0.5s;
+  width: 100%;
+  height: 350px;
+  display: flex;
+  object-fit: cover;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card[data-selected="true"] {
+  box-shadow: 0 0 6px 7.5px #eed27e, 0 0 7px 7px #d0c960, 0 0 13px 5.5px #6b7f29 !important;
+}
+
+.title {
+  box-sizing: border-box;
+  color: rgb(210, 234, 255);
+  font-family: Exo;
+  font-size: 24px;
+  width: 100%;
+  font-style: italic;
+  font-weight: 800;
+  text-align: left;
+  letter-spacing: 0.02em;
+  line-height: 24px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+}
+
+.card-container {
+  height: 350px;
+
+  transition: all 0.3s ease-in;
+  perspective: 1000px;
+}
+
+.card-container-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-container[data-rotated="true"] .card-container-inner {
+  transform: rotateY(180deg);
+}
