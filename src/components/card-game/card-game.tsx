@@ -6,6 +6,8 @@ import stormDragon from "assets/images/storm-dragon.png";
 import earthDragon from "assets/images/earth-dragon.png";
 import backface from "assets/images/backface.png";
 import finishGameSoundMp3 from "assets/sounds/magic-revilation.mp3";
+import cardFlipMp3 from "assets/sounds/card-flip.mp3";
+import rewardMp3 from "assets/sounds/reward-2.mp3";
 import emptyCard from "assets/images/empty-card.png";
 
 import { motion } from "framer-motion";
@@ -32,6 +34,8 @@ function CardGame() {
   const isGameProcessing = useRef<boolean>(false);
   const [resultCards, setResultCards] = useState<Card[]>([]);
   const [finishGameSound] = useState(new Audio());
+  const [cardFlipSound] = useState(new Audio());
+  const [rewardSound] = useState(new Audio());
   const [isPlayingSound, setIsPlayingSound] = useState(false);
   const handleCardClick = (index: number) => {
     if (isPlayingSound) return;
@@ -59,16 +63,31 @@ function CardGame() {
       const randomCardIndex = Math.floor(Math.random() * cardsList.length);
       const randomCard = cardsList.splice(randomCardIndex, 1)[0];
       resultingArray.push(randomCard);
-      await waitAsync(350);
+
       setResultCards((prev) => [...prev, randomCard]);
+      await cardFlipSound.play();
+      await waitAsync(200);
     }
 
     await waitAsync(700);
+    for (let index = 0; index < 4; index++) {
+      await rewardSound.play();
+      await waitAsync(600);
+    }
     isGameProcessing.current = false;
   };
 
   useEffect(() => {
+    cardFlipSound.src = cardFlipMp3;
+    rewardSound.src = rewardMp3;
     finishGameSound.src = finishGameSoundMp3;
+    cardFlipSound.playbackRate = 6;
+    rewardSound.playbackRate = 2;
+
+    rewardSound.addEventListener("loadeddata", () => {
+      console.log(rewardSound.duration);
+    });
+
     // const onSoundEnded = async () => {
     //   setIsPlayingSound(false);
     //   setGameFinished(true);
@@ -80,7 +99,7 @@ function CardGame() {
     //     const randomCardIndex = Math.floor(Math.random() * cardsList.length);
     //     const randomCard = cardsList.splice(randomCardIndex, 1)[0];
     //     resultingArray.push(randomCard);
-    //     await waitAsync(350);
+    //     await waitAsync(400);
     //     setResultCards((prev) => [...prev, randomCard]);
     //   }
     // };
@@ -167,7 +186,7 @@ function CardGame() {
             display: "grid",
             gridTemplateColumns: "repeat(6, minmax(50px, 200px))",
             justifyContent: "center",
-            gap: "10px",
+            gap: "15px",
           }}
         >
           {cards.map((card, index) => (
@@ -177,11 +196,14 @@ function CardGame() {
                 src={card.img}
                 className="card"
                 onClick={() => handleCardClick(index)}
-                data-selected={isPlayingSound ? false : selectedIndex === index}
+                data-selected={
+                  !isGameProcessing.current && selectedIndex === index
+                }
+                data-selectable={
+                  !isGameProcessing.current && selectedIndex !== index
+                }
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              >
-                {/* {gameFinished ? card.value : "Card Back"} */}
-              </motion.img>
+              ></motion.img>
             </motion.div>
           ))}
         </div>

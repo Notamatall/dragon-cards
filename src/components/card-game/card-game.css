@@ -1,5 +1,5 @@
-.card:hover[data-selected="false"] {
-  box-shadow: 0 0 6px 7.5px #264079, 0 0 7px 7px #6066d0, 0 0 13px 5.5px #6b7f29 !important;
+.card:hover[data-selectable="true"] {
+  box-shadow: 0 0 4px 5.5px #264079, 0 0 5px 5px #6066d0, 0 0 8px 4.5px #15688e !important;
 }
 
 .card {
@@ -16,7 +16,8 @@
 }
 
 .card[data-selected="true"] {
-  box-shadow: 0 0 6px 7.5px #eed27e, 0 0 7px 7px #d0c960, 0 0 13px 5.5px #6b7f29 !important;
+  box-shadow: 0 0 4px 5.5px #e56018, 0 0 5px 5px #d0c960,
+    0 0 8px 4.5px rgb(172, 74, 8) !important;
 }
 
 .title {
