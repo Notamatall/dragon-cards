@@ -1,49 +1,11 @@
-import React, { PropsWithChildren, RefObject, useCallback, useMemo, useRef, useState } from "react";
+import React, { PropsWithChildren, useCallback, useMemo, useRef, useState } from "react";
 
 import { BetModification, GenericState } from "types/index";
-import {
-  DEFAULT_RISK,
-  DEFAULT_BET_VALUE,
-  DEFAULT_LOCAL_BALANCE,
-} from "types/dragon-card/constants";
+import { DEFAULT_RISK } from "types/dragon-card/constants";
 import useNumberFunctions from "hooks/useNumberFunctions";
 import { gameInfo } from "src/constants/game-info";
-import { Dispatch, SetStateAction } from "react";
 import { DragonCardRiskType } from "types/dragon-card";
-
-interface IDragonCardContext {
-  bet: {
-    value: number;
-    setValue: (bet: BetModification) => void;
-  };
-  risk: GenericState<DragonCardRiskType>;
-  localBalance: {
-    ref: RefObject<number>;
-    value: string;
-    setValue: Dispatch<SetStateAction<number>>;
-    addToBalance: (value: number) => void;
-  };
-}
-
-const defaultValue: IDragonCardContext = {
-  bet: {
-    value: DEFAULT_BET_VALUE,
-    setValue: () => {},
-  },
-  risk: {
-    value: DEFAULT_RISK,
-    setValue: () => {},
-  },
-  localBalance: {
-    ref: { current: DEFAULT_LOCAL_BALANCE },
-    value: `${DEFAULT_LOCAL_BALANCE}`,
-    setValue: () => {},
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    addToBalance: (_value: number) => {},
-  },
-};
-
-const DragonCardContext = React.createContext<IDragonCardContext>(defaultValue);
+import DragonCardContext from "contexts/dragonCardContext";
 
 const DragonCardProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [risk, setRisk] = useState<DragonCardRiskType>(DEFAULT_RISK);

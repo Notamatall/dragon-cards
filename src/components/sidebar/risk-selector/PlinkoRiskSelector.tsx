@@ -1,19 +1,19 @@
 import { memo, useCallback } from "react";
 import { RISK_LIST } from "types/dragon-card/constants";
-import { PlinkoRiskType } from "types/dragon-card";
 import { GenericState } from "types/index";
 import styles from "./styles.module.scss";
 import usePlinkoAudioContext from "hooks/useAudioContext";
+import { DragonCardRiskType } from "types/dragon-card";
 
 interface PlinkoRiskSelectorProps {
   isDisabled: boolean;
-  risk: GenericState<PlinkoRiskType>;
+  risk: GenericState<DragonCardRiskType>;
 }
 const PlinkoRiskSelector: React.FC<PlinkoRiskSelectorProps> = ({ isDisabled, risk }) => {
   const { playClickSound } = usePlinkoAudioContext();
 
   const handleClick = useCallback(
-    (value: PlinkoRiskType) => () => {
+    (value: DragonCardRiskType) => () => {
       playClickSound();
       risk.setValue(value);
     },

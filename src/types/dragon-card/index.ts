@@ -51,3 +51,12 @@ export interface DragonCardImages {
   ballImage: HTMLImageElement;
   collidingPegImage: HTMLImageElement;
 }
+
+export enum DragonCard {
+  FIRE = "FIRE",
+  FROST = "FROST",
+  STORM = "STORM",
+  SHADOW = "SHADOW",
+  EARTH = "EARTH",
+  EMPTY = "EMPTY",
+}

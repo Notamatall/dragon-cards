@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import finishGameSoundMp3 from "assets/sounds/magic-revilation.mp3";
 import cardFlipMp3 from "assets/sounds/card-flip.mp3";
@@ -17,6 +17,14 @@ const initialCards = [
   { id: 5, value: "E", img: getProviderGamePath("cards", "earth.png") },
   { id: 6, value: "F", img: getProviderGamePath("cards", "empty.png") },
 ];
+const servserCards = [
+  { id: 1, value: "A", img: getProviderGamePath("cards", "fire.png") },
+  { id: 2, value: "B", img: getProviderGamePath("cards", "frost.png") },
+  { id: 3, value: "C", img: getProviderGamePath("cards", "shadow.png") },
+  { id: 4, value: "D", img: getProviderGamePath("cards", "storm.png") },
+  { id: 5, value: "E", img: getProviderGamePath("cards", "earth.png") },
+  { id: 6, value: "F", img: getProviderGamePath("cards", "empty.png") },
+];
 
 const backface = getProviderGamePath("cards", "backface.png");
 interface Card {
@@ -25,7 +33,7 @@ interface Card {
   img: string;
 }
 
-function CardGame() {
+function CardGame({ roundId, serverCards }: { roundId?: number; serverCards?: Card[] }) {
   // State for cards, the selected card index, and whether the game is finished.
   const [cards, setCards] = useState(initialCards);
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
@@ -36,11 +44,13 @@ function CardGame() {
   const [cardFlipSound] = useState(new Audio());
   const [rewardSound] = useState(new Audio());
   const [isPlayingSound, setIsPlayingSound] = useState(false);
+
   const handleCardClick = (index: number) => {
     if (isPlayingSound) return;
     if (selectedIndex === null) {
       setSelectedIndex(index);
     } else {
+      setMatches([]);
       const newCards = [...cards];
       [newCards[selectedIndex], newCards[index]] = [newCards[index], newCards[selectedIndex]];
       setCards(newCards);
@@ -49,34 +59,34 @@ function CardGame() {
   };
   const waitAsync = (time: number) => new Promise(res => setTimeout(() => res(null), time));
 
-  const onSoundEnded = async () => {
+  const onSoundEnded = useCallback(async () => {
     setIsPlayingSound(false);
     const resultingArray = [];
-    const cardsList = initialCards.slice();
-    const cardsCount = cardsList.length;
-    for (let index = 0; index < cardsCount; index++) {
-      const randomCardIndex = Math.floor(Math.random() * cardsList.length);
-      const randomCard = cardsList.splice(randomCardIndex, 1)[0];
-      // const randomCard = cardsList[index];
-      resultingArray.push(randomCard);
+    // const cardsList = servserCards.slice();
+    // const cardsCount = cardsList.length;
+    if (serverCards) {
+      for (let index = 0; index < serverCards.length; index++) {
+        const randomCard = serverCards[index];
+        resultingArray.push(randomCard);
 
-      setResultCards(prev => [...prev, randomCard]);
-      await cardFlipSound.play();
-      await waitAsync(200);
-    }
-
-    await waitAsync(300);
-
-    for (let index = 0; index < resultingArray.length; index++) {
-      const card = cards[index];
-      if (resultingArray[index].id === card.id) {
-        setMatches(prev => [...prev, card.id]);
-        await rewardSound.play();
-        await waitAsync(1200);
+        setResultCards(prev => [...prev, randomCard]);
+        await cardFlipSound.play();
+        await waitAsync(200);
       }
+
+      await waitAsync(300);
+
+      for (let index = 0; index < resultingArray.length; index++) {
+        const card = cards[index];
+        if (resultingArray[index].id === card.id) {
+          setMatches(prev => [...prev, card.id]);
+          await rewardSound.play();
+          await waitAsync(1200);
+        }
+      }
+      isGameProcessing.current = false;
     }
-    isGameProcessing.current = false;
-  };
+  }, [cardFlipSound, cards, rewardSound, serverCards]);
 
   useEffect(() => {
     cardFlipSound.src = cardFlipMp3;
@@ -86,26 +96,31 @@ function CardGame() {
     rewardSound.playbackRate = 2.5;
   }, [cardFlipSound, finishGameSound, rewardSound]);
 
-  const onFinishGameClick = async () => {
-    if (isGameProcessing.current) return;
-    isGameProcessing.current = true;
+  useEffect(() => {
+    console.log("executing");
 
-    setIsPlayingSound(true);
-    setTimeout(() => {
-      setResultCards([]);
-      setMatches([]);
-    }, 1000);
+    const onFinishGameClick = async () => {
+      if (isGameProcessing.current) return;
+      isGameProcessing.current = true;
 
-    await finishGameSound.play();
-    setTimeout(() => {
-      onSoundEnded();
-    }, 1200);
-  };
+      setIsPlayingSound(true);
+      setTimeout(() => {
+        setResultCards([]);
+        setMatches([]);
+      }, 1000);
+
+      await finishGameSound.play();
+      setTimeout(() => {
+        onSoundEnded();
+      }, 1200);
+    };
+    if (roundId != undefined) {
+      onFinishGameClick();
+    }
+  }, [roundId]);
 
   return (
-    <div>
-      <h2 className="title">Dragon card</h2>
-
+    <div style={{ padding: "40px 20px 0   20px " }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
         <div
           className="cards-container"
@@ -116,14 +131,14 @@ function CardGame() {
             gap: "15px",
           }}
         >
-          {cards.map((card, index) => (
+          {servserCards.map((card, index) => (
             <div
               style={{
                 position: "relative",
               }}
               className="card-container"
               data-rotated={!isPlayingSound && resultCards[index]?.img ? true : false}
-              key={`${card.id}`}
+              key={`${card.id}-server`}
             >
               <div className="card-container-inner">
                 <div
@@ -163,6 +178,7 @@ function CardGame() {
         >
           {cards.map((card, index) => (
             <div
+              key={`${card.id}-user`}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -170,7 +186,7 @@ function CardGame() {
                 gap: 20,
               }}
             >
-              <motion.div layout style={{ position: "relative" }} key={card.id}>
+              <motion.div layout style={{ position: "relative" }}>
                 <motion.img
                   layout
                   src={card.img}
@@ -198,8 +214,6 @@ function CardGame() {
           ))}
         </div>
       </div>
-
-      <button onClick={onFinishGameClick}>finish games</button>
     </div>
   );
 }

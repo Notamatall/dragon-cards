@@ -1,11 +1,11 @@
+import AudioContext from "contexts/audioContext";
 import React from "react";
-import PlinkoAudioContext from "src/contexts/audioContext";
 
-function usePlinkoAudioContext() {
-  const context = React.useContext(PlinkoAudioContext);
+function useAudioContext() {
+  const context = React.useContext(AudioContext);
   if (context === undefined) {
-    throw new Error("usePlinkoAudioContext must be used within a PlinkoAudioContext");
+    throw new Error("useAudioContext must be used within a AudioContext");
   }
   return context;
 }
-export default usePlinkoAudioContext;
+export default useAudioContext;

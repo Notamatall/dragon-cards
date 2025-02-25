@@ -1,11 +1,11 @@
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef } from "react";
 import { useLocalStorage, useMediaQuery } from "usehooks-ts";
-import PlinkoAudioContext from "src/contexts/audioContext";
 import { LS_KEYS } from "types/constants";
 import { Howl } from "howler";
 import { getProviderGamePath } from "utils/index";
+import AudioContext from "contexts/audioContext";
 
-const PlinkoAudioProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const AudioProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isSoundEnabled, setSoundEnabled] = useLocalStorage(LS_KEYS.SOUND, true);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -67,7 +67,7 @@ const PlinkoAudioProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <PlinkoAudioContext.Provider
+    <AudioContext.Provider
       value={{
         playDropSound,
         playMultiplierSound,
@@ -76,8 +76,8 @@ const PlinkoAudioProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }}
     >
       {children}
-    </PlinkoAudioContext.Provider>
+    </AudioContext.Provider>
   );
 };
 
-export default PlinkoAudioProvider;
+export default AudioProvider;

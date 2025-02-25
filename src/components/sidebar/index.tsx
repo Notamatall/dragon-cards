@@ -1,30 +1,26 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import styles from "./PlinkoSideBar.module.scss";
-import PlinkoAutobetTab from "./PlinkoAutobetTab";
-import PlinkoManualTab from "./PlinkoManualTab";
+import AutobetTab from "./PlinkoAutobetTab";
 import { SideBarTab, SideBarTabs } from "types/dragon-card";
-import usePlinkoAudioContext from "hooks/useAudioContext";
+import useAudioContext from "hooks/useAudioContext";
 import Button from "../button/Button";
 import { ISwitchButton } from "types/switch-buttons";
 import SwitchButtons from "../switch-buttons";
+import PlinkoManualTab from "./PlinkoManualTab";
 
-interface PlinkoSideBarProps {
-  dropBall: () => Promise<boolean>;
+interface SideBarProps {
+  makeBet: () => Promise<boolean>;
   balance: string;
   canMakeBet: boolean;
 }
 
-const PlinkoSideBar: React.FC<PlinkoSideBarProps> = ({
-  dropBall,
-  balance,
-  canMakeBet,
-}): React.ReactElement => {
-  const { playDropSound } = usePlinkoAudioContext();
+const Sidebar: React.FC<SideBarProps> = ({ makeBet, balance, canMakeBet }): React.ReactElement => {
+  const { playDropSound } = useAudioContext();
   const [activePanel, setActivePanel] = useState<SideBarTabs>(SideBarTab.MANUAL);
   const [autobetCount, setAutobetsCount] = useState<number>(0);
   const [isAutobetActive, setIsAutobetActive] = useState<boolean>(false);
-  const autobetTimeout = useRef<any | null>(null);
+  const autobetTimeout = useRef<number | null>(null);
   const isAutobetRunning = useRef<boolean>(false);
 
   const stopAutobet = useCallback(() => {
@@ -38,8 +34,8 @@ const PlinkoSideBar: React.FC<PlinkoSideBarProps> = ({
   useEffect(() => {
     if (isAutobetActive === true && isAutobetRunning.current === false) {
       const runAutobet = async (remainingBets: number) => {
-        const plinkoResult = await dropBall();
-        if (plinkoResult) {
+        const Result = await makeBet();
+        if (Result) {
           playDropSound();
         }
 
@@ -48,7 +44,7 @@ const PlinkoSideBar: React.FC<PlinkoSideBarProps> = ({
           setAutobetsCount(prev => prev - 1);
         }
 
-        if (!plinkoResult || remainingBets <= 0 || isAutobetRunning.current === false) {
+        if (!Result || remainingBets <= 0 || isAutobetRunning.current === false) {
           stopAutobet();
           return;
         }
@@ -63,7 +59,7 @@ const PlinkoSideBar: React.FC<PlinkoSideBarProps> = ({
 
       runAutobet(betsCount);
     }
-  }, [isAutobetActive, autobetCount, dropBall, stopAutobet, playDropSound]);
+  }, [isAutobetActive, autobetCount, makeBet, stopAutobet, playDropSound]);
 
   useEffect(() => {
     return () => {
@@ -96,13 +92,13 @@ const PlinkoSideBar: React.FC<PlinkoSideBarProps> = ({
         onStartAutobetClick();
       }
     } else {
-      dropBall().then(isDropped => {
+      makeBet().then(isDropped => {
         if (isDropped) {
           playDropSound();
         }
       });
     }
-  }, [activePanel, dropBall, isAutobetActive, playDropSound, stopAutobet]);
+  }, [activePanel, makeBet, isAutobetActive, playDropSound, stopAutobet]);
 
   const switchButtons = useMemo<ISwitchButton[]>(() => {
     return [
@@ -128,7 +124,7 @@ const PlinkoSideBar: React.FC<PlinkoSideBarProps> = ({
         <SwitchButtons changeOrderInMobile={true} buttons={switchButtons} />
         {activePanel === SideBarTab.MANUAL && <PlinkoManualTab isAutobetActive={isAutobetActive} />}
         {activePanel === SideBarTab.AUTO && (
-          <PlinkoAutobetTab
+          <AutobetTab
             isAutobetActive={isAutobetActive}
             autobetState={[autobetCount, setAutobetsCount]}
           />
@@ -147,4 +143,4 @@ const PlinkoSideBar: React.FC<PlinkoSideBarProps> = ({
   );
 };
 
-export default memo(PlinkoSideBar);
+export default memo(Sidebar);

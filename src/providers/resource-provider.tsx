@@ -34,12 +34,10 @@ const ResourcesProvider: React.FC<PropsWithChildren> = ({ children }) => {
         const fetchPromises = images.map(image =>
           loadImageAsync(getProviderGamePath("cards", image)),
         );
-        const loadedImages = await Promise.all(fetchPromises);
-        console.log(loadedImages);
+        await Promise.all(fetchPromises);
       } catch (error) {
         console.error("Error loading dragon cards:", error);
       } finally {
-        console.log("pop");
         popLoadingAction(LoadingActions.DRAGON_CARDS);
       }
     }
@@ -58,8 +56,6 @@ const ResourcesProvider: React.FC<PropsWithChildren> = ({ children }) => {
       } catch (error) {
         console.error("Error loading CACHING_IMAGES", error);
       } finally {
-        console.log("pop");
-
         popLoadingAction(LoadingActions.CACHING_IMAGES);
       }
     }

@@ -1,33 +1,38 @@
-import { PlinkoRiskType, PlinkoRows } from "types/dragon-card";
-import { MULTIPLIERS } from "types/dragon-card/constants";
 import CryptoJS from "crypto-js";
+import RngGames from "src/rng/rng.games";
+import { DragonCardRiskType } from "types/dragon-card";
 
-export interface PlinkoGameResult {
+export interface GameResult {
   payout: number;
   multiplier: number;
   results: number[];
   multiplierIndex: number;
-  rowsCount: PlinkoRows;
-  risk: PlinkoRiskType;
+  risk: DragonCardRiskType;
   roundId: number;
 }
+
 let roundId = 0;
-class PlinkoApiService {
-  getResult(bet: number, rowsCount: PlinkoRows, risk: PlinkoRiskType): Promise<PlinkoGameResult> {
-    const outcome = this.getOutcomes(rowsCount);
-    const results = this.getRepresentativeDirections(outcome);
-    const multiplierIndex = results.reduce((result, current) => result + current, 0);
-    const multiplier = this.getMultiplier(rowsCount, risk, multiplierIndex);
+export interface Card {
+  id: number;
+  value: string;
+  img: string;
+}
+
+class ApiService {
+  getResult(
+    bet: number,
+    risk: DragonCardRiskType,
+  ): Promise<{ serverCards: Card[]; roundId: number }> {
+    const outcome = this.getOutcomes();
+    const results = outcome.map(val => Math.floor(val * 6));
+    const shuffledCards = RngGames.getRandom(results);
+    // const multiplierIndex = results.reduce((result, current) => result + current, 0);
+    // const multiplier = this.getMultiplier(rowsCount, risk, multiplierIndex);
     return new Promise(resolve => {
       setTimeout(() => {
         resolve({
-          multiplier,
-          results,
-          payout: multiplier * bet,
-          multiplierIndex,
-          rowsCount,
-          risk,
-          roundId: ++roundId,
+          roundId: roundId++,
+          serverCards: shuffledCards,
         });
       }, 200);
     });
@@ -44,9 +49,10 @@ class PlinkoApiService {
     return byteArray;
   }
 
-  private getOutcomes(rowsCount: number) {
-    const bytes = this.generateRandomBytesArray(rowsCount * 4);
-    const bytesByRowsCount = bytes.slice(0, rowsCount * 4);
+  private getOutcomes() {
+    const cardsCount = 6;
+    const bytes = this.generateRandomBytesArray(cardsCount * 4);
+    const bytesByRowsCount = bytes.slice(0, cardsCount * 4);
     const chunks = bytesByRowsCount.reduce((result, current, index) => {
       if (index % 4 == 0) result.push([current]);
       else {
@@ -86,18 +92,18 @@ class PlinkoApiService {
   //     return bytes;
   //   }
 
-  private getRepresentativeDirections(outcome: number[]): number[] {
-    const values = [0, 1];
-    const mappedValues: number[] = outcome.map(result => values[Math.floor(result * 2)]);
-    return mappedValues;
-  }
+  // private getRepresentativeDirections(outcome: number[]): number[] {
+  //   const values = [0, 1];
+  //   const mappedValues: number[] = outcome.map(result => values[Math.floor(result * 2)]);
+  //   return mappedValues;
+  // }
 
-  private getMultiplier(rowsCount: PlinkoRows, risk: PlinkoRiskType, index: number): number {
-    const oddsSet = MULTIPLIERS[rowsCount][risk];
-    const multiplier = oddsSet[index];
-    return multiplier;
-  }
+  // private getMultiplier(rowsCount: Rows, risk: RiskType, index: number): number {
+  //   const oddsSet = MULTIPLIERS[rowsCount][risk];
+  //   const multiplier = oddsSet[index];
+  //   return multiplier;
+  // }
 }
 
-const plinkoApiService = new PlinkoApiService();
-export default plinkoApiService;
+const apiService = new ApiService();
+export default apiService;
