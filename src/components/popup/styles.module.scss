@@ -1,0 +1,228 @@
+.modal {
+  &Root {
+    background: none;
+    border: 0px;
+    position: relative;
+    z-index: 99999;
+  }
+  &Overlay {
+    transition-property: opacity;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+    opacity: 1;
+    position: fixed;
+    inset: 0rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 0rem;
+    z-index: 200;
+  }
+  &Inner {
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    bottom: 0px;
+    left: 0;
+    max-height: 100%;
+    z-index: 200;
+    pointer-events: none;
+    padding: 5dvh 5vw 5dvh;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &UpperContent {
+    transition-property: transform, opacity;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+    transform-origin: center center;
+    opacity: 1;
+    transform: scale(1);
+    flex: none;
+    padding: 20px 0;
+    border-radius: 20px 10px 20px 20px;
+    background-color: var(--primary-color);
+    color: var(--paradise);
+    max-height: 100%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    width: 530px;
+    outline: 0px;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    text-decoration: none;
+    box-sizing: border-box;
+    box-shadow:
+      rgba(0, 0, 0, 0.05) 0px 0.0625rem 0.1875rem,
+      rgba(0, 0, 0, 0.05) 0px 2.25rem 1.75rem -0.4375rem,
+      rgba(0, 0, 0, 0.04) 0px 1.0625rem 1.0625rem -0.4375rem;
+    pointer-events: all;
+    max-width: 100%;
+    overflow-y: auto;
+  }
+
+  &Content {
+    padding: 24px 24px;
+    @media screen and (max-width: 460px) {
+      padding: 24px 16px;
+    }
+  }
+
+  &CloseButton {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 28.6px;
+    background: var(--black-4);
+    display: flex;
+    width: 44px;
+    height: 44px;
+    padding: 7.7px;
+    justify-content: center;
+    align-items: center;
+    gap: 11px;
+  }
+}
+
+.betInfo {
+  border-radius: var(--md, 12px);
+  background: var(--grey-1);
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.centeredFlex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.info {
+  &Container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    gap: 20px;
+    font-family: var(--secondary-font);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 21px;
+    text-align: left;
+  }
+  &GameTitle {
+    color: var(--paradise);
+    text-align: center;
+    font-family: var(--primary-font);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  &Header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px;
+    align-items: center;
+    color: var(--paradise);
+    font-family: var(--primary-font);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    &Login {
+      border-radius: 6px;
+      background: var(--grey-1);
+      display: flex;
+      padding: 10px 12px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+  &Body {
+    text-align: center;
+    font-family: var(--primary-font);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    background: var(--moon);
+    border-radius: 8px;
+    border: 1px solid var(--night-light);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+    &Header {
+      width: 100%;
+      display: flex;
+      border-bottom: 1px solid var(--night-light);
+
+      & > :nth-child(2) {
+        border-left: 1px solid var(--night-light);
+        border-right: 1px solid var(--night-light);
+      }
+
+      &Cell {
+        padding: 15px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        font-size: 14px;
+        min-width: 0;
+        & > :nth-child(2) {
+          color: var(--paradise);
+          font-family: var(--primary-font);
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+          text-transform: uppercase;
+
+          @media screen and (max-width: 700px) {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    &Multiplier {
+      display: flex;
+      padding: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+  }
+}
+
+.playPlinkoBtn {
+  text-align: center;
+  font-family: var(--primary-font);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+  height: 50px;
+  border-radius: var(--sm);
+  width: 100%;
+  padding: 0 32px;
+  transition: transform ease 0.2s;
+  cursor: pointer;
+  background: var(--blue-1);
+  color: white;
+  &:active {
+    transform: scale(0.98);
+  }
+}

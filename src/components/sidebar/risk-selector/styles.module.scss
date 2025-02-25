@@ -1,0 +1,40 @@
+.risk {
+  &Buttons {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+  }
+
+  &Button {
+    display: flex;
+    padding: 7px 10px 8px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 0;
+    border-radius: var(--xs);
+    text-transform: capitalize;
+    color: var(--starlight-25);
+    font-family: var(--primary-font);
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    background: var(--black-3);
+
+    &[data-active="true"] {
+      border-radius: 4px;
+      background: var(--dark-cat);
+      box-shadow: 0px 0px 7.4px 0px rgba(255, 208, 38, 0.05) inset;
+      color: #ffd026;
+    }
+
+    &:disabled {
+      opacity: 0.8;
+    }
+
+    &:not(:disabled):hover {
+      opacity: 1;
+      background: var(--dark-cat);
+    }
+  }
+}

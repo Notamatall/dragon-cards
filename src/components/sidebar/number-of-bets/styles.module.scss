@@ -1,0 +1,14 @@
+.infinityBtn {
+  background: #151a27 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--sm);
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  width: 34px;
+  height: 100%;
+  cursor: pointer;
+  &:not(:disabled):active {
+    transform: scale(0.95);
+  }
+}

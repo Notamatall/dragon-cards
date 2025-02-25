@@ -11,11 +11,10 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-    "declaration": false,
     "baseUrl": ".",
     "strict": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
@@ -23,12 +22,9 @@
       "types/*": ["./src/types/*"],
       "utils/*": ["./src/utils/*"],
       "hooks/*": ["./src/hooks/*"],
-      "assets/*": ["./src/assets/*"],
-      "public-assets/*": ["./public/assets/*"],
-      "components/*": ["./src/components/*"],
-      "icons/*": ["./src/icons/*"]
+      "assets/*": ["./src/assets/*"]
     }
   },
-  "include": ["src", "src/svg.d.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

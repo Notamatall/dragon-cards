@@ -1,0 +1,84 @@
+.plinkoButton {
+  font-family: var(--primary-font);
+  border-radius: var(--sm);
+
+  color: white;
+
+  background: var(--blue-1);
+
+  text-transform: capitalize;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  padding: 0 32px;
+  transition: transform ease 0.2s;
+  cursor: pointer;
+
+  &:not(:disabled):active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+  }
+
+  &[data-size="md"] {
+    height: 40px;
+  }
+
+  &[data-size="lg"] {
+    height: 50px;
+  }
+
+  &[data-style="secondary"] {
+    border: 1px solid var(--light-grey);
+    background: var(--dark);
+  }
+
+  &[data-adaptive-order="true"] {
+    order: 2;
+    @media screen and (max-width: 1024px) {
+      order: 0;
+    }
+  }
+}
+
+.plinkoBalanceContainer {
+  height: 40px;
+  padding: 7px 10px 8px 10px;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--xs, 4px);
+  & :nth-child(1) {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  & :nth-child(2) {
+    color: white;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+  font-family: var(--primary-font);
+  background: var(--black-3);
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: auto;
+
+  &[data-mobile="true"] {
+    display: none;
+    margin-bottom: 12px;
+    @media (max-width: 1024px) {
+      display: flex;
+    }
+  }
+
+  &[data-mobile="false"] {
+    display: flex;
+    order: 4;
+    @media (max-width: 1024px) {
+      display: none;
+    }
+  }
+}

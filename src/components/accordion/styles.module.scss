@@ -1,0 +1,67 @@
+.accordion {
+  &Container {
+    background: #141a26;
+    border-radius: 12px;
+  }
+  &Panel {
+    &[data-open="false"] {
+      height: 0px;
+      overflow: hidden;
+      display: none;
+    }
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border: 1px solid #0c386c;
+  }
+  &PanelContent {
+    opacity: 0;
+    transition: opacity 200ms;
+    &[data-open="true"] {
+      opacity: 1;
+    }
+  }
+  &PanelBody {
+    gap: 12px;
+    padding: 36px 16px !important;
+    display: flex;
+    flex-direction: column;
+  }
+  &Button {
+    display: flex;
+    padding: 14px 16px;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(2, 92, 193, 0.45);
+    width: 100%;
+
+    &[data-open="true"] {
+      border-top-right-radius: 12px;
+      border-top-left-radius: 12px;
+    }
+    &[data-open="false"] {
+      border-radius: 12px;
+    }
+    cursor: pointer;
+    &:hover {
+      background: #181e29;
+    }
+  }
+  &RotateButton {
+    border-radius: 46px;
+    border: 1px solid rgba(2, 92, 193, 0.45);
+    background: #0e111b;
+    display: flex;
+    width: var(--xxxl, 32px);
+    height: var(--xxxl, 32px);
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+  }
+  &ButtonText {
+    color: #fff;
+    font-family: var(--primary-font);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+  }
+}

@@ -1,27 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import fireDragon from "assets/images/fire-dragon.png";
-import frostDragon from "assets/images/frost-dragon.png";
-import shadowDragon from "assets/images/shadow-dragon.png";
-import stormDragon from "assets/images/storm-dragon.png";
-import earthDragon from "assets/images/earth-dragon.png";
-import backface from "assets/images/backface.png";
+
 import finishGameSoundMp3 from "assets/sounds/magic-revilation.mp3";
 import cardFlipMp3 from "assets/sounds/card-flip.mp3";
 import rewardMp3 from "assets/sounds/reward-2.mp3";
-import emptyCard from "assets/images/empty-card.png";
 import DragonSnakeIcon from "assets/icons/dragon-snake.svg";
 
 import { motion } from "framer-motion";
 import "./card-game.css";
+import { getProviderGamePath } from "utils/index";
 // Initial card data (you can customize these values)
 const initialCards = [
-  { id: 1, value: "A", img: fireDragon },
-  { id: 2, value: "B", img: frostDragon },
-  { id: 3, value: "C", img: shadowDragon },
-  { id: 4, value: "D", img: stormDragon },
-  { id: 5, value: "E", img: earthDragon },
-  { id: 6, value: "F", img: emptyCard },
+  { id: 1, value: "A", img: getProviderGamePath("cards", "fire.png") },
+  { id: 2, value: "B", img: getProviderGamePath("cards", "frost.png") },
+  { id: 3, value: "C", img: getProviderGamePath("cards", "shadow.png") },
+  { id: 4, value: "D", img: getProviderGamePath("cards", "storm.png") },
+  { id: 5, value: "E", img: getProviderGamePath("cards", "earth.png") },
+  { id: 6, value: "F", img: getProviderGamePath("cards", "empty.png") },
 ];
+
+const backface = getProviderGamePath("cards", "backface.png");
 interface Card {
   id: number;
   value: string;
@@ -45,16 +42,12 @@ function CardGame() {
       setSelectedIndex(index);
     } else {
       const newCards = [...cards];
-      [newCards[selectedIndex], newCards[index]] = [
-        newCards[index],
-        newCards[selectedIndex],
-      ];
+      [newCards[selectedIndex], newCards[index]] = [newCards[index], newCards[selectedIndex]];
       setCards(newCards);
       setSelectedIndex(null);
     }
   };
-  const waitAsync = (time: number) =>
-    new Promise((res) => setTimeout(() => res(null), time));
+  const waitAsync = (time: number) => new Promise(res => setTimeout(() => res(null), time));
 
   const onSoundEnded = async () => {
     setIsPlayingSound(false);
@@ -67,7 +60,7 @@ function CardGame() {
       // const randomCard = cardsList[index];
       resultingArray.push(randomCard);
 
-      setResultCards((prev) => [...prev, randomCard]);
+      setResultCards(prev => [...prev, randomCard]);
       await cardFlipSound.play();
       await waitAsync(200);
     }
@@ -77,8 +70,7 @@ function CardGame() {
     for (let index = 0; index < resultingArray.length; index++) {
       const card = cards[index];
       if (resultingArray[index].id === card.id) {
-        console.log("playing");
-        setMatches((prev) => [...prev, card.id]);
+        setMatches(prev => [...prev, card.id]);
         await rewardSound.play();
         await waitAsync(1200);
       }
@@ -92,10 +84,6 @@ function CardGame() {
     finishGameSound.src = finishGameSoundMp3;
     cardFlipSound.playbackRate = 6;
     rewardSound.playbackRate = 2.5;
-
-    rewardSound.addEventListener("loadeddata", () => {
-      console.log(rewardSound.duration);
-    });
   }, [cardFlipSound, finishGameSound, rewardSound]);
 
   const onFinishGameClick = async () => {
@@ -132,12 +120,9 @@ function CardGame() {
             <div
               style={{
                 position: "relative",
-                // transform: isPlayingSound ? "scale(0.9)" : "scale(1)",
               }}
               className="card-container"
-              data-rotated={
-                !isPlayingSound && resultCards[index]?.img ? true : false
-              }
+              data-rotated={!isPlayingSound && resultCards[index]?.img ? true : false}
               key={`${card.id}`}
             >
               <div className="card-container-inner">
@@ -159,10 +144,7 @@ function CardGame() {
                       backfaceVisibility: "hidden",
                     }}
                   >
-                    <img
-                      className="card"
-                      src={resultCards[index]?.img ?? null}
-                    />
+                    <img className="card" src={resultCards[index]?.img ?? null} />
                   </div>
                 }
               </div>
@@ -194,12 +176,8 @@ function CardGame() {
                   src={card.img}
                   className="card"
                   onClick={() => handleCardClick(index)}
-                  data-selected={
-                    !isGameProcessing.current && selectedIndex === index
-                  }
-                  data-selectable={
-                    !isGameProcessing.current && selectedIndex !== index
-                  }
+                  data-selected={!isGameProcessing.current && selectedIndex === index}
+                  data-selectable={!isGameProcessing.current && selectedIndex !== index}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 ></motion.img>
               </motion.div>

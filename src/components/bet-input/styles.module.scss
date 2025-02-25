@@ -1,0 +1,26 @@
+.betInput {
+  &LabelContainer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &Currency {
+    font-family: var(--primary-font);
+    text-transform: uppercase;
+    color: white;
+  }
+
+  &MaxBet {
+    font-family: var(--primary-font);
+    font-size: 13px;
+    text-transform: capitalize;
+    color: var(--grey-3);
+  }
+
+  &InError {
+    color: var(--color-error);
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--primary-font);
+  }
+}

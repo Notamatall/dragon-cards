@@ -1,0 +1,32 @@
+.loaderContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 280px;
+}
+
+.progressBar {
+  &Container {
+    width: 100%;
+    height: 5px;
+    position: relative;
+    border-radius: 25px;
+  }
+  &Indicator {
+    height: 100%;
+    border-radius: 25px;
+    width: 100%;
+    background: #ffffffbf;
+  }
+  &IndicatorValue {
+    position: absolute;
+    border-radius: 25px;
+    width: 102%;
+    transition: width 1s;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
+    background-image: linear-gradient(90deg, #8653fc 0%, #a64cf4 100%);
+  }
+}

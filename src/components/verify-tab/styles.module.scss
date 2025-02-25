@@ -1,0 +1,10 @@
+.multiplierContainer {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: var(--moon);
+  border-top: 1px solid var(--night-light);
+  height: calc(3rem + 20px);
+}

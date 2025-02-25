@@ -1,0 +1,46 @@
+.plinkoSwitchButtons {
+  display: flex;
+  align-items: flex-start;
+  gap: 1px;
+  width: 100%;
+  border-radius: 46px;
+  :first-child {
+    border-top-left-radius: 46px;
+    border-bottom-left-radius: 46px;
+  }
+  :nth-child(2) {
+    border-top-right-radius: 46px;
+    border-bottom-right-radius: 46px;
+  }
+  & > button:disabled {
+    opacity: 0.7;
+  }
+
+  &[data-order="true"] {
+    @media (max-width: 1024px) {
+      order: 3;
+    }
+  }
+}
+
+.plinkoSwitchButton,
+.plinkoSwitchButtonActive {
+  display: flex;
+  padding: 11px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  background: var(--black-2);
+  color: var(--Totally-White-100, #fff);
+  text-align: center;
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.plinkoSwitchButtonActive {
+  background: var(--dark-cat);
+}
