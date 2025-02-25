@@ -1,7 +1,18 @@
 .card:hover[data-selectable="true"] {
   box-shadow: 0 0 4px 5.5px #264079, 0 0 5px 5px #6066d0, 0 0 8px 4.5px #15688e !important;
 }
-
+.icon-container {
+  background: white;
+  border-radius: 23px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
 .card {
   padding: 0px;
   border-radius: 20px;
