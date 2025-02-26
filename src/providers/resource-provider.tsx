@@ -23,12 +23,12 @@ const ResourcesProvider: React.FC<PropsWithChildren> = ({ children }) => {
       try {
         const images = [
           "backface.png",
-          "earth-dragon.png",
-          "empty-card.png",
-          "fire-dragon.png",
-          "frost-dragon.png",
-          "shadow-dragon.png",
-          "storm-dragon.png",
+          "earth.png",
+          "empty.png",
+          "fire.png",
+          "frost.png",
+          "shadow.png",
+          "storm.png",
         ];
 
         const fetchPromises = images.map(image =>
