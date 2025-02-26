@@ -1,6 +1,5 @@
 import { memo, useState } from "react";
 import styles from "./styles.module.scss";
-import useEvoGamingAsset from "hooks/useEvoGamingAsset";
 import { getProviderGamePath } from "utils/index";
 
 const Accordion = ({ children }: React.PropsWithChildren) => {

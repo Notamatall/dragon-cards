@@ -28,7 +28,6 @@ const Game = () => {
   }, []);
 
   const makeBet = async () => {
-    console.log("here");
     if (!validateBetSize(bet.value)) return false;
     const prevBalance = localBalance.ref.current;
     const balanceAfterBet = localBalance.ref.current - bet.value;
@@ -36,7 +35,7 @@ const Game = () => {
       localBalance.ref.current = localBalance.ref.current - bet.value;
 
       try {
-        const response = await apiService.getResult(bet.value, risk.value);
+        const response = await apiService.getResult();
         console.log(response);
         setlr(response);
         // if (response) {

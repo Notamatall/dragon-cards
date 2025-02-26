@@ -19,10 +19,7 @@ export interface Card {
 }
 
 class ApiService {
-  getResult(
-    bet: number,
-    risk: DragonCardRiskType,
-  ): Promise<{ serverCards: Card[]; roundId: number }> {
+  getResult(): Promise<{ serverCards: Card[]; roundId: number }> {
     const outcome = this.getOutcomes();
     const results = outcome.map(val => Math.floor(val * 6));
     const shuffledCards = RngGames.getRandom(results);
