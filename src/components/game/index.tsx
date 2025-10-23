@@ -8,10 +8,11 @@ import { gameInfo } from "src/constants/game-info";
 import apiService, { Card } from "src/api/plinkoService";
 import CardGame from "../card-game/card-game";
 
+export type GameInfo = { serverCards: Card[]; roundId: number };
 const Game = () => {
-  const { risk, bet, localBalance } = useDragonCardContext();
+  const { bet, localBalance } = useDragonCardContext();
   const canMakeBet = localBalance.ref.current - bet.value >= 0;
-  const [lastResponse, setlr] = useState<{ serverCards: Card[]; roundId: number }>();
+  const [lr, setlr] = useState<GameInfo>();
   // const [modalInfo, setModalnfo] = useState<{ info: PlinkoBetInfo; isOpen: boolean }>({
   //   info: {} as PlinkoBetInfo,
   //   isOpen: false,
@@ -36,8 +37,9 @@ const Game = () => {
 
       try {
         const response = await apiService.getResult();
-        console.log(response);
         setlr(response);
+        localBalance.setValue(localBalance.ref.current);
+
         // if (response) {
         //   const { multiplierIndex } = response;
 
@@ -78,7 +80,7 @@ const Game = () => {
             <SoundController />
           </div>
           <div className={styles.plinkoCanvasContainer}>
-            <CardGame serverCards={lastResponse?.serverCards} roundId={lastResponse?.roundId} />
+            <CardGame setLr={setlr} lr={lr} />
           </div>
         </div>
       </div>

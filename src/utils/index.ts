@@ -51,3 +51,7 @@ export function calculateReward(bet: number, multiplier: number) {
 export function getProviderGamePath(type: AssetType, filename: string) {
   return `./${import.meta.env.VITE_PROVIDER}/${import.meta.env.VITE_GAME}/${type}/${filename}`;
 }
+
+export function waitAsync(time: number) {
+  return new Promise(res => setTimeout(() => res(null), time));
+}

@@ -5,6 +5,43 @@ import { Howl } from "howler";
 import { getProviderGamePath } from "utils/index";
 import AudioContext from "contexts/audioContext";
 
+const getAudioList = (isMobile: boolean) => ({
+  bet: new Howl({
+    src: [getProviderGamePath("audio", "bet.mp3")],
+    html5: isMobile,
+    volume: 0.8,
+  }),
+  result: new Howl({
+    src: [getProviderGamePath("audio", "result.mp3")],
+    html5: isMobile,
+    volume: 0.8,
+  }),
+  click: new Howl({
+    src: [getProviderGamePath("audio", "click.wav")],
+    html5: isMobile,
+    volume: 1,
+  }),
+  reveal: new Howl({
+    src: [getProviderGamePath("audio", "reveal.mp3")],
+    html5: isMobile,
+    volume: 1,
+  }),
+  cardFlip: new Howl({
+    src: [getProviderGamePath("audio", "card-flip.mp3")],
+    html5: isMobile,
+    volume: 1,
+    rate: 6,
+  }),
+  reward: new Howl({
+    src: [getProviderGamePath("audio", "reward.mp3")],
+    html5: isMobile,
+    volume: 1,
+    rate: 2.5,
+  }),
+});
+
+export type AudioKey = keyof ReturnType<typeof getAudioList>;
+
 const AudioProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isSoundEnabled, setSoundEnabled] = useLocalStorage(LS_KEYS.SOUND, true);
 
@@ -18,60 +55,27 @@ const AudioProvider: React.FC<PropsWithChildren> = ({ children }) => {
     };
   }, [setSoundEnabled]);
 
-  const betAudio = useRef<Howl | null>(null);
-  const resultAudio = useRef<Howl | null>(null);
-  const clickAudio = useRef<Howl | null>(null);
+  const audioList = useRef<Record<AudioKey, Howl>>(getAudioList(isMobile));
 
   useEffect(() => {
-    betAudio.current = new Howl({
-      src: [getProviderGamePath("audio", "bet.mp3")],
-      html5: isMobile,
-      volume: 0.8,
-    });
-
-    resultAudio.current = new Howl({
-      src: [getProviderGamePath("audio", "result.mp3")],
-      html5: isMobile,
-      volume: 0.8,
-    });
-
-    clickAudio.current = new Howl({
-      src: [getProviderGamePath("audio", "click.wav")],
-      html5: isMobile,
-      volume: 1,
-    });
-
+    audioList.current = getAudioList(isMobile);
     return () => {
-      betAudio.current?.unload();
-      resultAudio.current?.unload();
-      clickAudio.current?.unload();
+      Object.values(audioList.current).forEach(howl => howl.unload());
     };
   }, [isMobile]);
 
   useEffect(() => {
-    betAudio.current?.mute(!isSoundEnabled);
-    resultAudio.current?.mute(!isSoundEnabled);
-    clickAudio.current?.mute(!isSoundEnabled);
+    Object.values(audioList.current).forEach(howl => howl.mute(!isSoundEnabled));
   }, [isSoundEnabled]);
 
-  const playMultiplierSound = useCallback(() => {
-    resultAudio.current?.play();
-  }, []);
-
-  const playDropSound = useCallback(() => {
-    betAudio.current?.play();
-  }, []);
-
-  const playClickSound = useCallback(() => {
-    clickAudio.current?.play();
+  const playSound = useCallback((soundKey: AudioKey) => {
+    return audioList.current[soundKey].play();
   }, []);
 
   return (
     <AudioContext.Provider
       value={{
-        playDropSound,
-        playMultiplierSound,
-        playClickSound,
+        playSound,
         soundController,
       }}
     >

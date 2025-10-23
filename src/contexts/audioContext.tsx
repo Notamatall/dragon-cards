@@ -1,9 +1,9 @@
 import React from "react";
+import { AudioKey } from "src/providers/audio-provider";
 
 interface IAudioContext {
-  playDropSound: () => void;
-  playMultiplierSound: () => void;
-  playClickSound: () => void;
+  playSound: (audioKey: AudioKey) => number;
+
   soundController: {
     toggle: () => void;
     mute: () => void;
@@ -12,9 +12,7 @@ interface IAudioContext {
 }
 
 const defaultValue: IAudioContext = {
-  playDropSound: () => {},
-  playMultiplierSound: () => {},
-  playClickSound: () => {},
+  playSound: () => 0,
   soundController: {
     toggle: () => {},
     mute: () => {},

@@ -10,14 +10,14 @@ interface PlinkoRiskSelectorProps {
   risk: GenericState<DragonCardRiskType>;
 }
 const PlinkoRiskSelector: React.FC<PlinkoRiskSelectorProps> = ({ isDisabled, risk }) => {
-  const { playClickSound } = usePlinkoAudioContext();
+  const { playSound } = usePlinkoAudioContext();
 
   const handleClick = useCallback(
     (value: DragonCardRiskType) => () => {
-      playClickSound();
+      playSound("click");
       risk.setValue(value);
     },
-    [playClickSound, risk],
+    [playSound, risk],
   );
 
   return (
