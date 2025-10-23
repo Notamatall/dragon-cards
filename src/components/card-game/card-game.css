@@ -38,7 +38,8 @@
 }
 
 .card-game-field {
-  padding: 10px;
+  padding: 50px;
+  background: url("/images/dragon-bg.png");
 }
 
 .cards-container {
