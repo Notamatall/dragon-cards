@@ -19,13 +19,13 @@ const PlinkoBetAmountInput: React.FC<PlinkoBetAmountInputProps> = ({
   canMakeBet,
   bet,
 }: PlinkoBetAmountInputProps) => {
-  const { playClickSound } = usePlinkoAudioContext();
+  const { playSound } = usePlinkoAudioContext();
   const onInputButtonClick = useCallback(
     (value: BetModification) => {
-      playClickSound();
+      playSound("click");
       bet.setValue(value);
     },
-    [playClickSound, bet],
+    [playSound, bet],
   );
   const inputButtons = useMemo(() => {
     return (

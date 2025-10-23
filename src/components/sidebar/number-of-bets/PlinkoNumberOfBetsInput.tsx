@@ -12,15 +12,15 @@ const PlinkoNumberOfBetsInput: React.FC<PlinkoNumberOfBetsInputProps> = ({
   isAutobetActive,
   autobetState: [state, setter],
 }: PlinkoNumberOfBetsInputProps) => {
-  const { playClickSound } = usePlinkoAudioContext();
+  const { playSound } = usePlinkoAudioContext();
   const inputButtonStyle = useMemo(
     () => (state > 0 ? { border: "1px solid #fff" } : undefined),
     [state],
   );
   const handleInfinityClick = useCallback(() => {
-    playClickSound();
+    playSound("click");
     setter(0);
-  }, [playClickSound, setter]);
+  }, [playSound, setter]);
 
   return (
     <div className="inputContainer" style={{ order: "2" }}>
