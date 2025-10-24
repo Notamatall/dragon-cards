@@ -16,7 +16,6 @@ export function loadImageAsync(src: string): Promise<{ img: HTMLImageElement; sr
     const img = new Image();
     img.src = src;
     img.onload = () => {
-      console.log("resolving", img);
       resolve({ img, src });
     };
     img.onerror = e => reject(e);

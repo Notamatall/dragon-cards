@@ -3,12 +3,18 @@ import { LoadingActions } from "types/constants";
 import { getProviderGamePath, loadImageAsync } from "utils/index";
 import React from "react";
 import ResourcesContext from "src/contexts/resourcesContext";
+import { Asset } from "types/index";
 
-const ResourcesProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const ResourcesProvider: React.FC<{ assets: Asset[] } & PropsWithChildren> = ({
+  assets,
+  children,
+}) => {
   const [loadingQueue, setLoadingQueue] = useState<LoadingActions[]>([
     LoadingActions.DRAGON_CARDS,
     LoadingActions.CACHING_IMAGES,
   ]);
+
+  const [filesLoaded, setFilesLoaded] = useState(0);
 
   const pushLoadingAction = useCallback((action: LoadingActions) => {
     setLoadingQueue(prev => (prev.includes(action) ? prev : [...prev, action]));
@@ -21,18 +27,10 @@ const ResourcesProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     async function loadAnimations() {
       try {
-        const images = [
-          "backface.png",
-          "earth.png",
-          "empty.png",
-          "fire.png",
-          "frost.png",
-          "shadow.png",
-          "storm.png",
-        ];
-
-        const fetchPromises = images.map(image =>
-          loadImageAsync(getProviderGamePath("cards", image)),
+        const fetchPromises = assets.map(image =>
+          loadImageAsync(getProviderGamePath(image.folderName, image.fileName)).then(() =>
+            setFilesLoaded(prev => prev + 1),
+          ),
         );
         await Promise.all(fetchPromises);
       } catch (error) {
@@ -43,34 +41,39 @@ const ResourcesProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
 
     loadAnimations();
-  }, [popLoadingAction, pushLoadingAction]);
+  }, [assets, popLoadingAction, pushLoadingAction]);
 
-  useEffect(() => {
-    async function loadImages() {
-      try {
-        await Promise.all([
-          loadImageAsync(getProviderGamePath("images", "infinity.svg")),
-          loadImageAsync(getProviderGamePath("images", "sound-off.svg")),
-          loadImageAsync(getProviderGamePath("images", "sound-on.svg")),
-        ]);
-      } catch (error) {
-        console.error("Error loading CACHING_IMAGES", error);
-      } finally {
-        popLoadingAction(LoadingActions.CACHING_IMAGES);
-      }
-    }
+  // useEffect(() => {
+  //   async function loadImages() {
+  //     try {
 
-    loadImages();
-  }, [popLoadingAction, pushLoadingAction]);
+  //         loadImageAsync(getProviderGamePath("images", "infinity.svg")),
+  //         loadImageAsync(getProviderGamePath("images", "sound-off.svg")),
+  //         loadImageAsync(getProviderGamePath("images", "sound-on.svg")),
+  //     } catch (error) {
+  //       console.error("Error loading CACHING_IMAGES", error);
+  //     } finally {
+  //       popLoadingAction(LoadingActions.CACHING_IMAGES);
+  //     }
+  //   }
+
+  //   loadImages();
+  // }, [popLoadingAction, pushLoadingAction]);
 
   const isLoadingResources = useMemo(() => {
     return loadingQueue.length !== 0;
   }, [loadingQueue]);
 
+  const loadingProgress = useMemo(() => {
+    console.log(filesLoaded);
+    return Math.ceil((filesLoaded / assets.length) * 100);
+  }, [assets, filesLoaded]);
+
   return (
     <ResourcesContext.Provider
       value={{
         isLoadingResources,
+        loadingProgress,
       }}
     >
       {children}

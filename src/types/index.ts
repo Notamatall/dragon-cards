@@ -9,6 +9,10 @@ export interface GenericState<T> {
 
 export type ProvablyFairPanelType = "Seeds" | "Verification";
 
+export type Asset = {
+  folderName: AssetType;
+  fileName: string;
+};
 export enum ProvablyFairPanel {
   SEEDS = "Seeds",
   VERIFICATION = "Verification",

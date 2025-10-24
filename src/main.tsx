@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import AudioProvider from "./providers/audio-provider";
@@ -7,10 +6,11 @@ import ResourcesProvider from "./providers/resource-provider";
 import LoaderProvider from "./providers/loader-provider";
 import "styles/index";
 import Game from "./components/game";
+import { assets } from "./constants/assets";
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
-  <ResourcesProvider>
+  <ResourcesProvider assets={assets}>
     <AudioProvider>
       <LoaderProvider>
         <DragonCardProvider>
