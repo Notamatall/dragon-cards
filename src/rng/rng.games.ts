@@ -13,6 +13,9 @@ abstract class RngGames {
       { id: 4, value: "D", img: getProviderGamePath("cards", "storm.png") },
       { id: 5, value: "E", img: getProviderGamePath("cards", "earth.png") },
       { id: 6, value: "F", img: getProviderGamePath("cards", "empty.png") },
+      { id: 7, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
+      { id: 8, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
+      { id: 9, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
     ];
   }
 

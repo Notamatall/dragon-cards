@@ -21,7 +21,7 @@ export interface Card {
 class ApiService {
   getResult(): Promise<{ serverCards: Card[]; roundId: number }> {
     const outcome = this.getOutcomes();
-    const results = outcome.map(val => Math.floor(val * 6));
+    const results = outcome.map(val => Math.floor(val * 9));
     const shuffledCards = RngGames.getRandom(results);
     // const multiplierIndex = results.reduce((result, current) => result + current, 0);
     // const multiplier = this.getMultiplier(rowsCount, risk, multiplierIndex);
@@ -47,7 +47,7 @@ class ApiService {
   }
 
   private getOutcomes() {
-    const cardsCount = 6;
+    const cardsCount = 9;
     const bytes = this.generateRandomBytesArray(cardsCount * 4);
     const bytesByRowsCount = bytes.slice(0, cardsCount * 4);
     const chunks = bytesByRowsCount.reduce((result, current, index) => {

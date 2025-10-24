@@ -15,6 +15,9 @@ const initialCards = [
   { id: 4, value: "D", img: getProviderGamePath("cards", "storm.png") },
   { id: 5, value: "E", img: getProviderGamePath("cards", "earth.png") },
   { id: 6, value: "F", img: getProviderGamePath("cards", "empty.png") },
+  { id: 7, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
+  { id: 8, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
+  { id: 9, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
 ];
 
 const servserCards = [
@@ -24,6 +27,9 @@ const servserCards = [
   { id: 4, value: "D", img: getProviderGamePath("cards", "storm.png") },
   { id: 5, value: "E", img: getProviderGamePath("cards", "earth.png") },
   { id: 6, value: "F", img: getProviderGamePath("cards", "empty.png") },
+  { id: 7, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
+  { id: 8, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
+  { id: 9, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
 ];
 
 const multipliersList = {
@@ -161,39 +167,38 @@ function CardGame({
 
   return (
     <div className="card-game-field">
-      <div className="cards-containers">
-        <div className="cards-container">
-          {servserCards.map((card, index) => (
-            <div
-              className="card-container"
-              data-rotated={!isPlayingSound && resultCards[index]?.img ? true : false}
-              key={`${card.id}-server`}
-            >
-              <div className="card-container-inner">
-                <div
-                  style={{
-                    position: "absolute",
-                    backfaceVisibility: "hidden",
-                  }}
-                >
-                  <img src={backface} className="card" />
-                </div>
-                <div
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    position: "absolute",
-                    transform: "rotateY(180deg)",
-                    backfaceVisibility: "hidden",
-                  }}
-                >
-                  <img className="card" src={resultCards[index]?.img ?? null} />
-                </div>
+      <div className="cards-container">
+        {servserCards.map((card, index) => (
+          <div
+            className="card-container"
+            data-rotated={!isPlayingSound && resultCards[index]?.img ? true : false}
+            key={`${card.id}-server`}
+          >
+            <div className={"card-container-inner"}>
+              <div
+                style={{
+                  position: "absolute",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <img src={backface} className="card" />
+              </div>
+              <div
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  position: "absolute",
+                  transform: "rotateY(180deg)",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <img className="card" src={resultCards[index]?.img ?? null} />
               </div>
             </div>
-          ))}
-        </div>
-
+          </div>
+        ))}
+      </div>
+      {/* 
         <div className="cards-container">
           {cards.map((card, index) => (
             <div
@@ -226,8 +231,7 @@ function CardGame({
               </div>
             </div>
           ))}
-        </div>
-      </div>
+        </div> */}
     </div>
   );
 }
