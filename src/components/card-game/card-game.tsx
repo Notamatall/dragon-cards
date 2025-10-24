@@ -8,7 +8,7 @@ import { DragonCardRiskType } from "types/dragon-card";
 import { useDragonCardContext } from "hooks/useDragonCardContext";
 import { GameInfo } from "../game";
 
-const initialCards = [
+const initialCards: { id: number; value: DragonCardValue; img: string }[] = [
   { id: 1, value: "A", img: getProviderGamePath("cards", "fire.png") },
   { id: 2, value: "B", img: getProviderGamePath("cards", "frost.png") },
   { id: 3, value: "C", img: getProviderGamePath("cards", "shadow.png") },
@@ -20,23 +20,77 @@ const initialCards = [
   { id: 9, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
 ];
 
-const servserCards = [
+export type DragonCardValue = "A" | "B" | "C" | "D" | "E" | "F" | "S" | "P";
+
+const CardImages: Record<DragonCardValue, string> = {
+  A: getProviderGamePath("cards", "fire.png"),
+  B: getProviderGamePath("cards", "frost.png"),
+  C: getProviderGamePath("cards", "shadow.png"),
+  D: getProviderGamePath("cards", "storm.png"),
+  E: getProviderGamePath("cards", "earth.png"),
+  F: getProviderGamePath("cards", "empty.png"),
+  P: getProviderGamePath("cards", "poison.png"),
+  S: getProviderGamePath("cards", "skeleton.png"),
+};
+const servserCards: { id: number; value: DragonCardValue; img: string }[] = [
   { id: 1, value: "A", img: getProviderGamePath("cards", "fire.png") },
   { id: 2, value: "B", img: getProviderGamePath("cards", "frost.png") },
   { id: 3, value: "C", img: getProviderGamePath("cards", "shadow.png") },
   { id: 4, value: "D", img: getProviderGamePath("cards", "storm.png") },
   { id: 5, value: "E", img: getProviderGamePath("cards", "earth.png") },
   { id: 6, value: "F", img: getProviderGamePath("cards", "empty.png") },
-  { id: 7, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
+  { id: 7, value: "P", img: getProviderGamePath("cards", "poison.png") },
   { id: 8, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
   { id: 9, value: "S", img: getProviderGamePath("cards", "skeleton.png") },
 ];
 
-const multipliersList = {
-  [DragonCardRiskType.CLASSIC]: [0, 3.5, 4, 0, 10, 7],
-  [DragonCardRiskType.LOW]: [0, 1, 2, 1, 2.5, 1.5],
-  [DragonCardRiskType.MEDIUM]: [0, 3, 5, 0, 6, 1.5],
-  [DragonCardRiskType.HIGH]: [0, 0, 25, 0, 50, 0],
+const multipliersList: Record<DragonCardRiskType, Record<DragonCardValue, number | "death">> = {
+  [DragonCardRiskType.CLASSIC]: {
+    A: 3, // Fire — moderate win
+    B: 2.5, // Frost — small win
+    C: 4, // Shadow — solid hit
+    D: 6, // Storm — bigger win
+    P: 3, // Storm — bigger win
+    E: 5, // Earth — steady win
+    F: 0, // Empty — no reward
+    S: "death", // Skeleton — lose
+  },
+
+  [DragonCardRiskType.LOW]: {
+    A: 2,
+    B: 1.5,
+    C: 2.5,
+    D: 3,
+    E: 2,
+    P: 3, // Storm — bigger win
+
+    F: 0,
+    S: "death",
+  },
+
+  [DragonCardRiskType.MEDIUM]: {
+    A: 5,
+    B: 4,
+    C: 7,
+    D: 10,
+    E: 6,
+    F: 0,
+    P: 3, // Storm — bigger win
+
+    S: "death",
+  },
+
+  [DragonCardRiskType.HIGH]: {
+    A: 12,
+    B: 10,
+    C: 18,
+    D: 25,
+    P: 3, // Storm — bigger win
+
+    E: 20,
+    F: 0,
+    S: "death",
+  },
 };
 
 const getMultipliersByRisk = (risk: DragonCardRiskType) => {
@@ -108,19 +162,19 @@ function CardGame({
         for (let index = 0; index < resultingArray.length; index++) {
           const card = cards[index];
           if (resultingArray[index].id === card.id) {
-            finalMatches.push(index);
+            finalMatches.push(card);
             setMatches(prev => [...prev, card.id]);
             playSound("reward");
 
             await waitAsync(400);
           }
         }
-        const isLost = finalMatches.some(cardIndex => multipliers[cardIndex] === 0);
+        const isLost = finalMatches.some(card => multipliers[card.value] === "death");
         console.log("islost", isLost, finalMatches);
 
         if (!isLost) {
           const wonMultiplier = finalMatches.reduce(
-            (total, cardIndex) => (total += multipliers[cardIndex]),
+            (total, card) => (total += multipliers[card.value] as number),
             0,
           );
           console.log("wonMultiplier", wonMultiplier);
@@ -156,14 +210,21 @@ function CardGame({
     }
   }, [onSoundEnded, playSound, lr]);
 
-  const getMatchColor = (cardId: number, cardIndex: number) => {
-    const isIncludes = matches.includes(cardId);
+  // const getMatchColor = (cardId: number, cardIndex: number) => {
+  //   const isIncludes = matches.includes(cardId);
 
-    if (isIncludes) {
-      return multipliers[cardIndex] > 0 ? "#53d859" : "#f03030";
-    }
-    return "white";
+  //   if (isIncludes) {
+  //     return multipliers[cardIndex] > 0 ? "#53d859" : "#f03030";
+  //   }
+  //   return "white";
+  // };
+
+  const getMultiplierValue = (value: DragonCardValue) => {
+    const isDeath = multipliers[value] === "death";
+    if (isDeath) return multipliers[value];
+    else return `${multipliers[value]}x`;
   };
+  const getCardImage = (value: DragonCardValue) => CardImages[value];
 
   return (
     <div className="card-game-field">
@@ -192,7 +253,9 @@ function CardGame({
                   backfaceVisibility: "hidden",
                 }}
               >
-                <img className="card" src={resultCards[index]?.img ?? null} />
+                <div className="multiplier">{getMultiplierValue(card.value)}</div>
+
+                <img className="card" src={getCardImage(card.value)} />
               </div>
             </div>
           </div>
