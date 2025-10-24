@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 
 import { useResourcesContext } from "hooks/useResourcesContext";
 import Loader from "src/components/loader";
-import { LOADER_MAX_PERCENT, LOADER_PROGRESS_MAX_VALUE } from "types/constants";
+import { LOADER_MAX_PERCENT } from "types/constants";
 
 const LoaderContext = React.createContext({});
 
