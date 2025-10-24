@@ -102,19 +102,23 @@ function CardGame({
         for (let index = 0; index < resultingArray.length; index++) {
           const card = cards[index];
           if (resultingArray[index].id === card.id) {
-            finalMatches.push(card);
+            finalMatches.push(index);
             setMatches(prev => [...prev, card.id]);
             playSound("reward");
 
             await waitAsync(400);
           }
         }
-        const isLost = finalMatches.some(card => multipliers[card.id - 1] === 0);
+        const isLost = finalMatches.some(cardIndex => multipliers[cardIndex] === 0);
+        console.log("islost", isLost, finalMatches);
+
         if (!isLost) {
           const wonMultiplier = finalMatches.reduce(
-            (total, currCard) => (total += multipliers[currCard.id - 1]),
+            (total, cardIndex) => (total += multipliers[cardIndex]),
             0,
           );
+          console.log("wonMultiplier", wonMultiplier);
+
           localBalance.addToBalance(bet.value * wonMultiplier);
         }
         setLr(undefined);

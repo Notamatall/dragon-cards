@@ -38,8 +38,13 @@
 }
 
 .card-game-field {
-  padding: 50px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
   background: url("/images/dragon-bg.png");
+  background-size: 100% 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 700px;
 }
 
 .cards-container {
